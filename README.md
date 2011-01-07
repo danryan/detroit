@@ -2,7 +2,7 @@
 
 Detroit is a super-simple Sinatra app for exposing your collectd RRDs as JSON.
 
-The JSON is compatible with (Flot)[http://code.google.com/p/flot/] currently, with plans to add support for more Javascript graphing libraries (gRaphael.js, for one)
+The JSON is compatible with [Flot](http://code.google.com/p/flot/) currently, with plans to add support for more Javascript graphing libraries (gRaphael.js, for one)
 
 ## Installation
 
