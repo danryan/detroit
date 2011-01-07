@@ -1,9 +1,11 @@
+require 'yaml'
+
 module Detroit
   class App < Sinatra::Base
-    CONFIG = YAML.load_file(File.join(File.dirname(__FILE__), "config.yml")
-    # DATA_DIR = CONFIG[:data_dir]
+    CONFIG = YAML.load_file(File.join(File.dirname(__FILE__), "config.yml"))
+    # DATA_DIR = CONFIG['data_dir']
     # Uncomment the above line and remove the line below when you're ready to rock
-    DATA_DIR = (File.join(File.dirname(__FILE__), "data/rrd")
+    DATA_DIR = File.join(File.dirname(__FILE__), "data/rrd")
     
     configure(:development) do
       register Sinatra::Reloader
@@ -16,11 +18,13 @@ module Detroit
     end
     
     get "/hosts/:host" do
+      host = params[:host]
       plugins = Dir.glob("#{DATA_DIR}/#{host}/*").map { |p| File.basename(p) }
       { :host => host, :plugins => plugins }.to_json
     end
     
     get "/hosts/:host/:plugin" do
+      host = params[:host]
       plugin = params[:plugin]
       metrics = Dir.glob("#{DATA_DIR}/#{host}/#{plugin}/*.rrd").map do |m|
         File.basename(m).sub(".rrd","")
@@ -29,6 +33,7 @@ module Detroit
     end
     
     get "/hosts/:host/:plugin/:metric" do
+      host = params[:host]
       plugin = params[:plugin]
       metric = params[:metric]
       data = get_data(host, plugin, metric)
