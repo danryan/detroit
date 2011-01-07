@@ -1,0 +1,7 @@
+%h2= @host.to_s
+%h3= @plugin.to_s
+%ul
+  - @metrics.each do |metric|
+    %li
+      %a{:href => "/#{@host.to_s}/#{@plugin.to_s}/#{metric.to_s}"}= metric.to_s
+    

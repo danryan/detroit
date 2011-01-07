@@ -1,0 +1,41 @@
+GEM
+  specs:
+    activesupport (3.0.3)
+    backports (1.18.1)
+    ffi (0.6.3)
+      rake (>= 0.8.7)
+    haml (3.0.25)
+    i18n (0.5.0)
+    json (1.4.6)
+    monkey-lib (0.5.4)
+      backports
+    rack (1.2.1)
+    rake (0.8.7)
+    rrd-ffi (0.2.5)
+      activesupport
+      ffi
+    sinatra (1.1.0)
+      rack (~> 1.1)
+      tilt (~> 1.1)
+    sinatra-advanced-routes (0.5.1)
+      monkey-lib (~> 0.5.0)
+      sinatra (~> 1.0)
+      sinatra-sugar (~> 0.5.0)
+    sinatra-reloader (0.5.0)
+      sinatra (~> 1.0)
+      sinatra-advanced-routes (~> 0.5.0)
+    sinatra-sugar (0.5.0)
+      monkey-lib (~> 0.5.0)
+      sinatra (~> 1.0)
+    tilt (1.2.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  haml
+  i18n
+  json
+  rrd-ffi
+  sinatra
+  sinatra-reloader

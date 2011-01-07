@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Detroit</title>
+  <%= stylesheet_link_tag :all %>
+  <%= javascript_include_tag "jquery", "jquery.flot" %>
+  <%= csrf_meta_tag %>
+  <!--[if IE]><%= javascript_include_tag "excanvas.min" %><![endif]-->
+</head>
+<body>
+
+<%= yield %>
+
+<div id="placeholder" style="width:600px;height:300px">
+  
+</div>
+
+
+<script id="source" language="javascript" type="text/javascript"> 
+$(function () {
+  var data = [
+    {
+      "label": "shortterm",
+      "data": [
+        [1292137140*1000,0.1],
+        [1292137200*1000,0.18],
+        [1292137260*1000,0.09],
+        [1292137320*1000,0.12],
+        [1292137380*1000,0.25],
+        [1292137440*1000,0.30]
+      ]
+    },
+    {
+      "label": "midterm",
+      "data": [
+        [1292137140*1000, 0.2],
+        [1292137200*1000, 0.28],
+        [1292137260*1000, 0.29],
+        [1292137320*1000, 0.22],
+        [1292137380*1000, 0.25],
+        [1292137440*1000, 0.20]
+      ]
+    },
+    {
+      "label": "longterm",
+      "data": [
+        [1292137140*1000, 0.12],
+        [1292137200*1000, 0.12],
+        [1292137260*1000, 0.02],
+        [1292137320*1000, 0.1],
+        [1292137380*1000, 0.5],
+        [1292137440*1000, 0.230]
+      ]
+    },
+  ];
+  
+  var options = {
+    series: {
+      lines: { show: true },
+      points: { show: true }
+    },
+    legend: { noColumns: 1 },
+    xaxis: { tickDecimals: 0, mode: "time" },
+    yaxis: { min: 0 },
+    selection: { mode: "x" }
+  };
+  
+  var placeholder = $("#placeholder");
+  
+  var plot = $.plot(placeholder, data, options);
+});
+</script>
+</body>
+</html>
