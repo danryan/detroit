@@ -18,3 +18,4 @@ When you're ready to use it on a real system with collectd, remove the `data` di
 * Add support for more Javascript graphing libraries
 * Allow for picking which Javascript graph lib to use
 * Rock harder
+* Oh yea, add tests. This was a proof-of-concept trial run that ended up working off the bat.
