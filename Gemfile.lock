@@ -24,6 +24,8 @@ GEM
     sinatra-reloader (0.5.0)
       sinatra (~> 1.0)
       sinatra-advanced-routes (~> 0.5.0)
+    sinatra-respond_to (0.6.0)
+      sinatra (~> 1.1)
     sinatra-sugar (0.5.0)
       monkey-lib (~> 0.5.0)
       sinatra (~> 1.0)
@@ -39,3 +41,4 @@ DEPENDENCIES
   rrd-ffi
   sinatra
   sinatra-reloader
+  sinatra-respond_to

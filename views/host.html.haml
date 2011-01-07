@@ -1,0 +1,7 @@
+%h2= @host.to_s
+
+%ul
+  - @plugins.each do |plugin|
+    %li
+      %a{:href => "#{@host.to_s.gsub(".","_")}/#{plugin.to_s}"}= plugin.to_s
+    

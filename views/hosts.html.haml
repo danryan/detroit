@@ -1,0 +1,3 @@
+- @hosts.each do |host|
+  .host
+    %a{:href=> host.to_s.gsub(".","_")}= host.to_s
