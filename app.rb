@@ -3,7 +3,7 @@ module Detroit
     CONFIG = YAML.load_file(File.join(File.dirname(__FILE__), "config.yml")
     # DATA_DIR = CONFIG[:data_dir]
     # Uncomment the above line and remove the line below when you're ready to rock
-    DATA_DIR = (File.join(File.dirname(__FILE__), "data")
+    DATA_DIR = (File.join(File.dirname(__FILE__), "data/rrd")
     
     configure(:development) do
       register Sinatra::Reloader

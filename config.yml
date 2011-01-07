@@ -1,1 +1,1 @@
-data_dir: REPLACE_ME
+data_dir: REPLACE_ME # Default is usually /var/lib/collectd/rrd
