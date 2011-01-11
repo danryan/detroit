@@ -34,10 +34,14 @@ module Detroit
     end
     
     get "/hosts/:host/:plugin/:metric" do
-      host    = params.delete(:host)
-      plugin  = params.delete(:plugin)
-      metric  = params.delete(:metric)
-      options = params      
+      host    = params[:host]
+      plugin  = params[:plugin]
+      metric  = params[:metric]
+      
+      options = {}
+      options[:start_at] = params[:start_at] if params[:start_at]
+      options[:end_at] = params[:end_at] if params[:end_at]
+      options[:function] = params[:function].to_sym if params[:function]
       data = get_data(host, plugin, metric, options)
       { :host => host, :plugin => plugin, :metric => metric, :data => data}.to_json
     end
@@ -47,9 +51,10 @@ module Detroit
     
     def get_data(host, plugin, metric, options={})
       rrd = RRD::Base.new(File.join(DATA_DIR, host, plugin, "#{metric}.rrd"))
-      start_at = options[:start_at] || Time.now - 3600.seconds    # rrd.starts_at
-      end_at = options[:end_at] || Time.now                       # rrd.ends_at
-      results = rrd.fetch(:average, :start => start_at, :end => end_at)
+      start_at = options[:start_at] || (Time.now - 3600.seconds).to_i # rrd.starts_at
+      end_at = options[:end_at] || Time.now.to_i                      # rrd.ends_at
+      function = options[:function] || :average
+      results = rrd.fetch(function, :start => start_at, :end => end_at)
       data = Array.new
       
       index = results.shift
