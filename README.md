@@ -13,6 +13,12 @@ The `data` directory contains sample RRDs for demonstration purposes. RRDs are a
 
 When you're ready to use it on a real system with collectd, remove the `data` directory and update `config.yml` with the actual location of your RRDs
 
+## Test data
+
+RRDs are platform-specific, so `detroit` comes with XML dump files of real-world RRDs. To use these, run the following rake command to create RRDs out of the XML files :
+
+    rake detroit:build_rrds
+    
 ## TODO
     
 * Add support for more Javascript graphing libraries

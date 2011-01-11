@@ -1,4 +1,5 @@
 GEM
+  remote: http://rubygems.org/
   specs:
     activesupport (3.0.3)
     backports (1.18.1)
@@ -24,8 +25,6 @@ GEM
     sinatra-reloader (0.5.0)
       sinatra (~> 1.0)
       sinatra-advanced-routes (~> 0.5.0)
-    sinatra-respond_to (0.6.0)
-      sinatra (~> 1.1)
     sinatra-sugar (0.5.0)
       monkey-lib (~> 0.5.0)
       sinatra (~> 1.0)
@@ -35,10 +34,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activesupport (= 3.0.3)
   haml
   i18n
   json
   rrd-ffi
   sinatra
   sinatra-reloader
-  sinatra-respond_to
