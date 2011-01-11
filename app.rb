@@ -2,9 +2,10 @@ require 'yaml'
 
 module Detroit
   class App < Sinatra::Base
+    # Did you remember to adjust config.yml to point to the right directory?
     CONFIG = YAML.load_file(File.join(File.dirname(__FILE__), "config.yml"))
     # DATA_DIR = CONFIG['data_dir']
-    # Uncomment the above line and remove the line below when you're ready to rock
+    # Comment the above line and uncomment the line below to use the test RRDs
     DATA_DIR = File.join(File.dirname(__FILE__), "data/rrd")
     
     configure(:development) do
@@ -33,10 +34,11 @@ module Detroit
     end
     
     get "/hosts/:host/:plugin/:metric" do
-      host = params[:host]
-      plugin = params[:plugin]
-      metric = params[:metric]
-      data = get_data(host, plugin, metric)
+      host    = params.delete(:host)
+      plugin  = params.delete(:plugin)
+      metric  = params.delete(:metric)
+      options = params      
+      data = get_data(host, plugin, metric, options)
       { :host => host, :plugin => plugin, :metric => metric, :data => data}.to_json
     end
     

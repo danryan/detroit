@@ -22,7 +22,7 @@ namespace :detroit do
   task :build_rrds
   DATA_DIR = File.join(File.expand_path(File.dirname(__FILE__)), "data/rrd")
   XML_DIR = File.join(File.expand_path(File.dirname(__FILE__)), "data/xml")
-  %x[ 
+  cmd = %x[ 
     for i in `find #{XML_DIR} -type d`
     do
       mkdir -p $(echo $i|sed 's/xml/rrd/')
@@ -33,14 +33,15 @@ namespace :detroit do
       rrdtool restore $i $(echo $i | sed 's/xml/rrd/g')
     done
   ]
+  cmd
   
   desc "Clean up test RRD files"
   task :cleanup_rrds
-  %x[
+  cmd = %x[
     for i in `find #{DATA_DIR} -iname '*.rrd' -type f`
     do
       rm $i
     done
   ]
-  
+  cmd
 end
