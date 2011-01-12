@@ -7,3 +7,7 @@ gem "rrd-ffi", :require => "rrd"
 gem "i18n"
 gem "sinatra-reloader", :require => "sinatra/reloader"
 gem "activesupport", "3.0.3"
+
+group :default, :demo do
+  gem 'rest-client'
+end

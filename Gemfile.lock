@@ -8,10 +8,13 @@ GEM
     haml (3.0.25)
     i18n (0.5.0)
     json (1.4.6)
+    mime-types (1.16)
     monkey-lib (0.5.4)
       backports
     rack (1.2.1)
     rake (0.8.7)
+    rest-client (1.6.1)
+      mime-types (>= 1.16)
     rrd-ffi (0.2.5)
       activesupport
       ffi
@@ -38,6 +41,7 @@ DEPENDENCIES
   haml
   i18n
   json
+  rest-client
   rrd-ffi
   sinatra
   sinatra-reloader

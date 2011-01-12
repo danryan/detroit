@@ -1,74 +1,60 @@
-require 'yaml'
-
 module Detroit
-  class App < Sinatra::Base
-    # Did you remember to adjust config.yml to point to the right directory?
-    CONFIG = YAML.load_file(File.join(File.dirname(__FILE__), "config.yml"))
-    DATA_DIR = CONFIG['data_dir']
-    # Comment the above line and uncomment the line below to use the test RRDs
-    # DATA_DIR = File.join(File.dirname(__FILE__), "data/rrd")
-    
+  class App < Sinatra::Base    
     configure(:development) do
       register Sinatra::Reloader
     end
     
-    
+    def url
+      "http://detroit.iamdanryan.com"
+    end
+
     get "/hosts" do
-      hosts = Dir.glob("#{DATA_DIR}/*").map { |h| File.basename(h) }
-      { :hosts => hosts }.to_json
+      response = JSON.parse(RestClient.get("#{url}/hosts"))
+      @hosts   = response["hosts"]
+      haml :hosts
+
     end
     
     get "/hosts/:host" do
-      host = params[:host]
-      plugins = Dir.glob("#{DATA_DIR}/#{host}/*").map { |p| File.basename(p) }
-      { :host => host, :plugins => plugins }.to_json
+      host     = params[:host]
+      response = JSON.parse(RestClient.get("#{url}/hosts/#{host}"))
+      @host    = response["host"]
+      @plugins = response["plugins"]
+      haml :host
+
     end
     
     get "/hosts/:host/:plugin" do
-      host = params[:host]
-      plugin = params[:plugin]
-      metrics = Dir.glob("#{DATA_DIR}/#{host}/#{plugin}/*.rrd").map do |m|
-        File.basename(m).sub(".rrd","")
-      end
-      { :host => host, :plugin => plugin, :metrics => metrics }.to_json
+      host     = params[:host]
+      plugin   = params[:plugin]
+      response = JSON.parse(RestClient.get("#{url}/hosts/#{host}/#{plugin}"))
+      @host    = response["host"]
+      @plugin  = response["plugin"]
+      @metrics = response["metrics"]
+
+      haml :plugin
     end
     
     get "/hosts/:host/:plugin/:metric" do
-      host    = params[:host]
-      plugin  = params[:plugin]
-      metric  = params[:metric]
-      
-      options = {}
-      options[:start_at] = params[:start_at] if params[:start_at]
-      options[:end_at] = params[:end_at] if params[:end_at]
-      options[:function] = params[:function].to_sym if params[:function]
-      data = get_data(host, plugin, metric, options)
-      { :host => host, :plugin => plugin, :metric => metric, :data => data}.to_json
+      host     = params[:host]
+      plugin   = params[:plugin]
+      metric   = params[:metric]
+      response = JSON.parse(RestClient.get("#{url}/hosts/#{host}/#{plugin}/#{metric}"))
+      @host    = response["host"]
+      @plugin  = response["plugin"]
+      @metric  = response["metric"]
+      @data    = response["data"]
+      haml :metric
     end
-    
-    
-    private
-    
-    def get_data(host, plugin, metric, options={})
-      rrd = RRD::Base.new(File.join(DATA_DIR, host, plugin, "#{metric}.rrd"))
-      start_at = options[:start_at] || (Time.now - 3600.seconds).to_i # rrd.starts_at
-      end_at = options[:end_at] || Time.now.to_i                      # rrd.ends_at
-      function = options[:function] || :average
-      results = rrd.fetch(function, :start => start_at, :end => end_at)
-      data = Array.new
-      
-      index = results.shift
-      index.each do |i|
-        data << {:label => i, :data => [] }
-      end
-      
-      results.each do |line|
-        line.map! {|a| a.respond_to?('nan?') ? ( a.nan? ? 0 : a ) : a }
-        index.each_with_index do |v,i|
-          data[i][:data] << line[i]
-        end
-      end
-      data
+
+    get "/demos/load" do
+      host = "test.example.com"
+      plugin = "load"
+      metric = "load"
+      query = "?start_at=1294750000&end_at=1294753000"
+      response = RestClient.get("#{url}/hosts/#{host}/#{plugin}/#{metric}#{query}")
+      @data = JSON.parse(response)
+      haml :load
     end
   end
 end
