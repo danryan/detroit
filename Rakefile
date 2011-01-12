@@ -18,30 +18,45 @@ require 'yard'
 YARD::Rake::YardocTask.new
 
 namespace :detroit do
+  data_dir = File.join(File.expand_path(File.dirname(__FILE__)), "data/rrd")
+  xml_dir = File.join(File.expand_path(File.dirname(__FILE__)), "data/xml")
+  
   desc "Build test RRDs from supplied XML files"
-  task :build_rrds
-  DATA_DIR = File.join(File.expand_path(File.dirname(__FILE__)), "data/rrd")
-  XML_DIR = File.join(File.expand_path(File.dirname(__FILE__)), "data/xml")
-  cmd = %x[ 
-    for i in `find #{XML_DIR} -type d`
+  task :build do
+  %x[ 
+    for i in `find #{xml_dir} -type d`
     do
       mkdir -p $(echo $i|sed 's/xml/rrd/')
     done
-  
-    for i in `find #{XML_DIR} -iname '*.xml' -type f`
+
+    for i in `find #{xml_dir} -iname '*.xml' -type f`
     do
       rrdtool restore $i $(echo $i | sed 's/xml/rrd/g')
     done
   ]
-  cmd
+  end
+  desc "Remove test RRD files"
+  task :cleanup do
+    %x[ for i in `find #{data_dir} -iname '*.rrd' -type f`; do rm $i; done ]
+  end
   
-  desc "Clean up test RRD files"
-  task :cleanup_rrds
-  cmd = %x[
-    for i in `find #{DATA_DIR} -iname '*.rrd' -type f`
-    do
-      rm $i
-    done
-  ]
-  cmd
+  namespace :tmp do
+    tmp_data_dir = File.join(File.expand_path(File.dirname(__FILE__)), "tmp/data/rrd")
+    tmp_xml_dir = File.join(File.expand_path(File.dirname(__FILE__)), "tmp/data/xml")
+    data_dir = File.join(File.expand_path(File.dirname(__FILE__)), "data/rrd")
+    xml_dir = File.join(File.expand_path(File.dirname(__FILE__)), "data/xml")
+    
+    desc "Build test RRDs in ./tmp"
+    task :copy => :build do
+      %x[ 
+          
+        mkdir -p tmp/data/rrd
+        cp -R #{data_dir}/* #{tmp_data_dir}
+      ]
+    end
+    
+    task :cleanup do
+      %x[ for i in `find #{tmp_data_dir} -iname '*.rrd' -type f`; do rm $i; done ]
+    end
+  end
 end

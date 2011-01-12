@@ -4,9 +4,9 @@ module Detroit
   class App < Sinatra::Base
     # Did you remember to adjust config.yml to point to the right directory?
     CONFIG = YAML.load_file(File.join(File.dirname(__FILE__), "config.yml"))
-    # DATA_DIR = CONFIG['data_dir']
+    DATA_DIR = CONFIG['data_dir']
     # Comment the above line and uncomment the line below to use the test RRDs
-    DATA_DIR = File.join(File.dirname(__FILE__), "data/rrd")
+    # DATA_DIR = File.join(File.dirname(__FILE__), "data/rrd")
     
     configure(:development) do
       register Sinatra::Reloader
